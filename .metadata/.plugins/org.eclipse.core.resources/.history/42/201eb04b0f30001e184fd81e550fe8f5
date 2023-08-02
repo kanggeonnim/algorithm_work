@@ -1,0 +1,8 @@
+package algorithm;
+
+public class perm {
+	public static void main(String[] args) {
+		boolean isSelected[] = new boolean[10];
+		
+	}
+}

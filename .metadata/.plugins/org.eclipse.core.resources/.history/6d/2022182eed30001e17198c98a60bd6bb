@@ -1,0 +1,55 @@
+package algorithm;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+class process {
+	int p_id;
+	int task;
+	
+	process(int p_id, int task){
+		this.p_id = p_id;
+		this.task = task;
+	}
+}
+
+// N == 대기줄 손님 수
+// M == 영업시작후 들어오는 손님수
+// W == 은행의 운영시간
+// T == 한번에 처리할수있는 처리량
+// Px == 손님아이디
+// tx == 손님의 업무량
+// cx == 들어온 시간
+public class BOJ22234 {
+	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static StringTokenizer st;
+	static ArrayList<process> que = new ArrayList<process>();
+
+	public static void main(String[] args) throws IOException {
+
+		st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int T = Integer.parseInt(st.nextToken());
+		int W = Integer.parseInt(st.nextToken());
+		// 은행 오픈전 들어오는 손님
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			int p_id = Integer.parseInt(st.nextToken());
+			int task = Integer.parseInt(st.nextToken());
+			que.add(new process(p_id, task));
+		}
+	
+		st = new StringTokenizer(br.readLine());
+		int M = Integer.parseInt(st.nextToken());
+		// 은행 오픈 후 들어오는 손님
+		for (int i = 0; i < M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int p_id = Integer.parseInt(st.nextToken());
+			int task = Integer.parseInt(st.nextToken());
+			que.add(new process(p_id, task));
+		}
+	}
+}

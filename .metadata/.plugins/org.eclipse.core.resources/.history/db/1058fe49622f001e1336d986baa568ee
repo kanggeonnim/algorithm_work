@@ -1,0 +1,28 @@
+package live01_dist;
+
+import java.util.Scanner;
+
+/**
+ * @author THKim
+ */
+/*
+10
+?…?…˜?—…
+ */
+public class IO1_ScannerTest {
+
+	public static void main(String[] args) {
+
+		Scanner sc = new Scanner(System.in);
+		System.out.print("ëª? ê¸?? : ");
+		System.out.println("==> SSAFY : "+sc.nextInt());
+		
+		System.out.print("?š°ë¦? ê¸°ìˆ˜ë¥? ?‚˜???‚´?Š” ?•œë§ˆë”” ? : ");
+		System.out.print("==> ?•œë§ˆë”” :"+sc.next()+"!");
+		
+//		System.out.print("==> ?•œë§ˆë”” :"+sc.nextLine()+"!");
+//		System.out.print("==> ?•œë§ˆë”” :"+sc.nextLine()+"!");
+		
+		sc.close();
+	}
+}

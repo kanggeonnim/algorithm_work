@@ -1,0 +1,63 @@
+package algorithm;
+
+import java.io.BufferedReader;
+import java.util.Scanner;
+
+public class SWEA1210 {
+	static int dx[] = { 1, -1, 0 };
+	static int dy[] = { 0, 0, -1 };
+
+	static int[][] board = null;
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc = new Scanner(System.in);
+
+		for (int tc = 1; tc <= 10; tc++) {
+			board = new int[100][100];
+			int t = sc.nextInt();
+			for (int i = 0; i < 100; i++) {
+				for (int j = 0; j < 100; j++) {
+					board[i][j] = sc.nextInt();
+				}
+			}
+			for(int i = 0; i < 100; i++) {
+				if(board[0][i] == 1) {
+					if(recur(i, 0, 2) == 2) {
+						System.out.println("#" + t + " "+ i);
+					}
+				}
+				
+			}
+
+		}
+	}
+
+	static public int recur(int x, int y, int direction) {
+		System.out.println(x + " " + y);
+		if (y == 99) {
+			return board[x][y];
+		}
+		// 사다리를 옆칸으로 이동중 이였다면 끝까지 이동하기
+		// 또는 호출자가 끝에 도달해서 벽밖에 없는경우 아래로 한칸내려감
+		if (direction == 2) {
+			for (int d = 0; d < 2; d++) {
+				int nx = x + dx[direction];
+				int ny = y + dy[direction];
+				if (nx >= 0 && ny >= 0 && nx < 99 && ny < 99 && board[ny][nx] == 1) {
+					return recur(nx, ny, d);
+				}
+			}
+			return recur(x, y + 1, direction);
+		}
+
+		int nx = x + dx[direction];
+		int ny = y + dy[direction];
+		if (nx >= 0 && ny >= 0 && nx < 99 && ny < 99 && board[ny][nx] == 1) {
+			return recur(nx, ny, direction);
+		} else {
+			return recur(x, y + 1, direction);
+		}
+	}
+
+}
