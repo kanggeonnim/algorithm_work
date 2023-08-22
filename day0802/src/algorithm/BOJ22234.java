@@ -1,23 +1,24 @@
 package algorithm;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.io.OutputStreamWriter;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 class Process implements Comparable<Process> {
 	int p_id;
 	int task;
-	int enter_t;
+	double enter_t;
+	float wait_n;
 
-	Process(int p_id, int task, int enter_t) {
+	Process(int p_id, int task, int enter_t, float wait_n) {
 		this.p_id = p_id;
 		this.task = task;
 		this.enter_t = enter_t;
+		this.wait_n = wait_n;
 	}
 
 	@Override
@@ -26,8 +27,9 @@ class Process implements Comparable<Process> {
 			return 1;
 		} else if (this.enter_t < o.enter_t) {
 			return -1;
-		} else
-			return 0;
+		} else {
+			return (int) (this.wait_n - o.wait_n);
+		}
 	}
 }
 
@@ -38,10 +40,13 @@ class Process implements Comparable<Process> {
 // Px == 손님아이디
 // tx == 손님의 업무량
 // cx == 들어온 시간
+
 public class BOJ22234 {
 	static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 	static StringTokenizer st;
-	static LinkedList<Process> que = new LinkedList<Process>();
+	static PriorityQueue<Process> que = new PriorityQueue<Process>();
+	static float wait_n = 0;
 
 	public static void main(String[] args) throws IOException {
 
@@ -54,7 +59,7 @@ public class BOJ22234 {
 			st = new StringTokenizer(br.readLine());
 			int p_id = Integer.parseInt(st.nextToken());
 			int task = Integer.parseInt(st.nextToken());
-			que.add(new Process(p_id, task, 0));
+			que.add(new Process(p_id, task, 0, wait_n++));
 		}
 
 		st = new StringTokenizer(br.readLine());
@@ -65,32 +70,40 @@ public class BOJ22234 {
 			int p_id = Integer.parseInt(st.nextToken());
 			int task = Integer.parseInt(st.nextToken());
 			int enter_t = Integer.parseInt(st.nextToken());
-			que.add(new Process(p_id, task, enter_t));
-		}
-
-		Collections.sort(que);
-
-		for (Process p : que) {
-			System.out.println("p_id: " + p.p_id + " enter_t:" + p.enter_t);
+			que.add(new Process(p_id, task, enter_t, wait_n++));
 		}
 
 		// 은행 업무 시작!~
 		int t = T; // 처리량
-		Process cur = que.getFirst(); // 작업할 프로세스의 주소
-		for (int i = 0; i < W; i++) {
-
+		Process cur = que.poll(); // 작업할 프로세스의 주소
+		Process old;
+		for (int i = 1; i <= W; i++) {
 			// 프로세스 교체하기
 			// 최대 업무량 도달 or 고객의 업무가 끝
+			old = cur;
 			if (t == 0 || cur.task == 0) {
-				que.removeFirst();	// 첫번째 고객 내보내기
-				
-				// 업무가 남아있다면 다시 줄서라!
-				if (cur.task != 0) {
-					// 근데 기다리는 손님이 없으면?
-					
-				} 
+				if (old.task != 0) { // 기존 업무가 남아있다면 다시 줄세우기
+					old.enter_t = i;
+					cur = que.poll();
+					if(old.enter_t == cur.enter_t) {
+						que.add(cur);
+						que.add(old);
+					}else {
+						que.add(old);
+						que.add(cur);
+					}
+				}
+				// 리스트 내에서 가장 우선순위가 높은 작업 꺼내쓰기
+				cur = que.poll();
+				// 업무수행량 회복
 				t = T;
 			}
+
+			bw.append(cur.p_id + "\n");
+			bw.flush();
+
+			cur.task = cur.task - 1;
+			t = t - 1;
 		}
 	}
 }
